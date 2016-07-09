@@ -618,9 +618,45 @@ http.createServer(function(req,res){
 	};//serializing data i.e. saving a particular state of the object
 	
 	//res.end(obj.toString());//will output like console.log(obj.toString()) i.e. [object, Object] rather than showing the values inside the object literal
-	res.end(JSON.stringify(obj));//will shoe the contents inside the object literal because JSON.stringify does the de-serialization of the data object i.e. to display or manipulate the value of serialized object
+	res.end(JSON.stringify(obj));//will show the contents inside the object literal because JSON.stringify does the de-serialization of the data object i.e. to display or manipulate the value of serialized object
 	
 }).listen(3000,'127.0.0.1');
 */
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//	ROUTING
+
+//	Mapping HTTP requests to contents(HTML page, Image, Objects, etc)
+
+/*
+var http = require('http');
+var fs = require('fs');
+
+http.createServer(function(req,res){
+	
+	if(req.url === '/api'){		//Checking the url and showing contents according to the url 
+		res.writeHead(200,{'Content-Type':'application/json'});
+		
+		var obj = {
+				firstname: 'John',
+				lastname: 'Doe'
+		};
+		
+		res.end(JSON.stringify(obj));
+	}
+	
+	else if(req.url === '/'){
+		res.writeHead(200,{'Content-Type':'text/html'});
+		fs.createReadStream(__dirname +'/ServerSample/index.htm').pipe(res);
+	}
+	
+	else{
+		res.writeHead(404,{'Content-Type':'text/html'});
+		res.end('<h1>No such Route</h1>');
+	}
+}).listen(3000,'127.0.0.1');
+*/
+
+//=========================================================================================================
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
