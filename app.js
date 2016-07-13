@@ -726,7 +726,7 @@ var port = process.env.PORT || 3000;
 app.use('/assets',express.static(__dirname + '/public'));//will link this HTTP request(/assets) to the public folder  
 
 app.get("/",function(req , res){	
-	res.send('<html><head><link href="assets/style.css" type="text/css" rel="stylesheet"/><title>Node Server</title></head><body><h1>Welcome User...</h1></body</html>');//the link contains an HTTP request to the our middleware(/assets) which will link the public directory and will fetch style.css file from the directory
+	res.send('<html><head><link href="/assets/style.css" type="text/css" rel="stylesheet"/><title>Node Server</title></head><body><h1>Welcome User...</h1></body</html>');//the link contains an HTTP request to the our middleware(/assets) which will link the public directory and will fetch style.css file from the directory
 });
 
 
@@ -741,6 +741,78 @@ app.listen(port);
 
 //Template Engines 
 
+//A template engine is just a utility which takes text and translate it ultimately into the HTML that should be delivered as an HTTP response
+//Using EJS template engine
+
+/*
+var express = require('express');
+var app = express();
+
+var port = process.env.PORT || 3000;
+
+app.use('/assets',express.static(__dirname + '/public'));
+
+app.set('view engine','ejs');//Sets the file extension of the template engine to be used
+
+app.get("/",function(req , res){	
+	res.render('index');//will find index.ejs automatically inside a folder named 'views' 
+});
+
+app.get("/person/:id",function(req,res){
+	res.render('person',{ID: req.params.id});	//passing the id from the querystring to the ejs view using property passed object ID
+});
+
+app.listen(port);
+*/
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//Querystring & Post Parameters
+//	Querystring & Post Parameters
+
+//	When a browser sends/builds a GET request the Querystring is in the header of the request
+
+//	When a browser sends/builds a POST request the data is sent along the body of the HTTP request
+
+//	When you end up sending JSON data of MIME type app./JSON and your JSON string is also in the body
+
+//	Cookies also move along with the HTTP request
+
+//	All of the above data moves from client to server in the form of strings(HTTP Requests) 
+//	Some middleware is required to pull out relevant information/data from the body of the HTTP request to work with it
+
+var express = require('express');
+var bodyParser = require('body-parser');
+
+var app = express();
+var urlencodedParser = bodyParser.urlencoded({ extended: false });//create application/x-www-form-urlencoded parser
+var jsonParser = bodyParser.json();//create application/json parser
+
+var port = process.env.PORT || 3000;
+
+app.use('/assets',express.static(__dirname + '/public'));
+
+app.set('view engine','ejs');
+
+app.get("/",function(req , res){	
+	res.render('index');//will find index.ejs automatically inside a folder named 'views' 
+});
+
+app.get("/person/:id",function(req,res){
+	res.render('person2',{ID: req.params.id, Qstr: req.query.qstr});//Will extract the value of property name req.query.qstr present in will pass its value to Qstr 
+});
+//The GET HTTP request sent is "http://localhost:3000/person/Tony?qstr=3" out of which the value qstr is copied to Qstr property of the passed object
+
+app.post('/person',urlencodedParser,function(req,res){
+	res.send('Thank You!!!');	//Sending text as a response
+	console.log(req.body.firstName);
+	console.log(req.body.lastName);
+});//The post method to which the function urlencodedParser is passed to make parse the HTTP post request which is UTF-8 encoded, to extract out relevant data from the 
+//body of the request and add the body data to the req.body object 
+
+app.post('/person2',jsonParser,function(req,res){
+	res.send('Thank You for the JSON data');	//Sending text as a response
+	console.log(req.body);
+	//console.log(req.body.lastName);
+});//Just like the above POST HTTP request the application/json data will be parsed from the request using jsonParser and the data will be added to the req.body
+
+app.listen(port);

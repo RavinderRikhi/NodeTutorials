@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Value Passing to EJS</title>
+<link href="/assets/style.css" type="text/css" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>  
+</head>
+<body>
+	<h1>Person: <%= ID %></h1>
+	<h2>Querystring Value : <%= Qstr %></h2>
+	<script>
+		$.ajax({
+			type:"POST",
+			url:"/person2",
+			data: JSON.stringify({firstName: 'Jane',
+			lastName: 'Doe'}),
+			dataType:'json',
+			contentType:'application/json'
+		});
+	</script>
+</body>
+</html>
